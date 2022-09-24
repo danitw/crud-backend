@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 
+	"crud-backend/database"
 	"crud-backend/routes"
 
 	"github.com/gorilla/mux"
@@ -11,6 +12,10 @@ import (
 )
 
 func main() {
+  db := database.Connection()
+
+  database.Migrate(db)
+
 	router := mux.NewRouter().StrictSlash(true)
 
 	router.Use(mux.CORSMethodMiddleware(router))
