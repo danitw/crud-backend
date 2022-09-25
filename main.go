@@ -1,20 +1,21 @@
 package main
 
 import (
-	"log"
-	"net/http"
-
 	"crud-backend/database"
 	"crud-backend/routes"
+	"log"
+	"net/http"
 
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
 )
 
-func main() {
-  db := database.Connection()
+const PORT string = "8000"
 
-  database.Migrate(db)
+func main() {
+	db := database.Connection()
+
+	database.Migrate(db)
 
 	router := mux.NewRouter().StrictSlash(true)
 
@@ -22,12 +23,12 @@ func main() {
 
 	routes.Routes(router)
 
-  c := cors.New(cors.Options{
-    AllowedOrigins: []string{"*"},
-    AllowedMethods: []string{"GET", "POST", "PUT", "DELETE"},
-    AllowedHeaders: []string{"*"},
-  })
+	c := cors.New(cors.Options{
+		AllowedOrigins: []string{"*"},
+		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE"},
+		AllowedHeaders: []string{"*"},
+	})
 
-	log.Println("initializing server in port 8000")
-	log.Fatal(http.ListenAndServe(":8000", c.Handler(router)))
+	log.Println("initializing server in port", PORT)
+	log.Fatal(http.ListenAndServe(":"+PORT, c.Handler(router)))
 }
